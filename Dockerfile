@@ -3,6 +3,8 @@ FROM ubuntu:18.04
 # update
 RUN apt-get -y update && apt-get install -y sudo wget vim nano
 
+RUN apt-get install -y libgl1-mesa-dev libglib2.0-0 libsm6 libxrender1 libxext6
+
 #install anaconda3
 WORKDIR /opt
 # download anaconda package and install anaconda
@@ -16,6 +18,9 @@ ENV PATH /opt/anaconda3/bin:$PATH
 # update pip and conda
 RUN pip install --upgrade pip
 
+# install opencv
+RUN pip install opencv-python
+
 WORKDIR /
 RUN mkdir /work
 # RUN chown root:docker -R /work
@@ -24,5 +29,9 @@ RUN mkdir /work
 # RUN chown root:docker -R /media/docker_shared/mono_develop
 # RUN chmod 2775 -R /media/docker_shared/mono_develop
 
-# execute jupyterlab as a default command
-CMD ["jupyter", "lab", "--ip=0.0.0.0", "--allow-root", "--LabApp.token=''"]
+
+CMD jupyter notebook --ip='*' --no-browser --allow-root --NotebookApp.token=''
+
+
+# execute jupyter notebook as a default command
+# CMD ["jupyter", "lab", "--ip=0.0.0.0", "--allow-root", "--LabApp.token=''"]
